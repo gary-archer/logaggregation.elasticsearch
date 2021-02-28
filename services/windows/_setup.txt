@@ -1,0 +1,47 @@
+/*
+ * Elastic Stack Service Setup on Windows for Elastic Search, Kibana and Filebeat
+ * For simplicity we'll run the service under the system account
+ */
+
+Download and unzip under a root folder:
+* c:\tools\logaggregation\elasticsearch-7.2.0/
+* c:\tools\logaggregation\filebeat-7.2.0-darwin-x86_64/
+* c:\tools\logaggregation\kibana-7.2.0-darwin-x86_64/
+
+ELASTIC SEARCH
+--------------
+* cd c:\tools\logaggregation\elasticsearch-7.2.0\bin
+* elasticsearch-service install
+* sc config elasticsearch-service-x64 start=delayed-auto
+* Create a temp folder at c:\tools\logaggregation\elasticsearch-7.2.0\tmp
+* run 'elasticsearch-service manager' and under Java / Java Options set -Djava.io.tmpdir="c:\tools\logaggregation\elasticsearch-7.2.0\tmp"
+* net start elasticsearch-service-x64
+
+KIBANA
+------
+* cd c:\tools\logaggregation\kibana-7.2.0-windows-x86_64\bin
+* sc create elastic-kibana displayname="Elastic Kibana" binPath="c:\tools\logaggregation\kibana-7.2.0-windows-x86_64\bin\kibana.bat" depend=elasticsearch-service-x64
+* sc config elastic-kibana start=delayed-auto
+* net start elastic-kibana
+
+Note:
+* Kibana takes too long to start and the Windows Service times out, but the Kibana NODE.EXE process starts OK
+
+FILEBEAT
+--------
+* Ensure that running Powershell installed and scripts are enabled (Set-Execution-Policy RemoteSigned)
+* cd c:\tools\logaggregation\filebeat-7.2.0-windows-x86_64
+* Edit install-service-filebeat.ps1 and customise the display name to "Elastic Filebeat"
+* .\install-service-filebeat.ps1
+* net start filebeat
+
+UNINSTALL STEPS
+---------------
+* cd c:\tools\logaggregation\elasticsearch-7.2.0\bin
+* elasticsearch-service remove
+
+* cd c:\tools\logaggregation\kibana-7.2.0-windows-x86_64\bin
+* sc delete elastic-kibana
+
+* cd c:\tools\logaggregation\filebeat-7.2.0-windows-x86_64
+* .\uninstall-service-filebeat.ps1

@@ -1,0 +1,11 @@
+[Unit]
+Description=Elastic Search
+
+[Service]
+WorkingDirectory=/home/gary/logaggregation/elasticsearch-7.2.0/bin
+ExecStart=/home/gary/logaggregation/elasticsearch-7.2.0/bin/elasticsearch
+SyslogIdentifier=elasticsearch
+User=gary
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,38 @@
+/*
+ * Elastic Stack Setup on Linux for Elastic Search, Kibana and Filebeat
+ * For simplicity we'll run the service under our own user account
+ */
+
+Download software and unzip under a root folder:
+* /home/gary/logaggregation/elasticsearch-7.2.0/
+* /home/gary/logaggregation/filebeat-7.2.0-darwin-x86_64/
+* /home/gary/logaggregation/kibana-7.2.0-darwin-x86_64/
+
+Set paths in service files in the current folder and copy them as root to this folder:
+* /etc/systemd/system
+
+Install agents, which will then run on every reboot:
+* systemctl enable elasticsearch
+* systemctl enable kibana
+* systemctl enable filebeat
+
+* systemctl daemon-reload
+
+* systemctl start elasticsearch
+* systemctl start kibana
+* systemctl start filebeat
+
+# Debug failures with these commands:
+* journalctl -fxeu elasticsearch
+* journalctl -fxeu kibana
+* journalctl -fxeu filebeat
+
+Unload if required:
+* systemctl stop elasticsearch
+* systemctl stop kibana
+* systemctl stop filebeat
+
+Check if running:
+systemctl is-active elasticsearch
+systemctl is-active kibana
+systemctl is-active filebeat

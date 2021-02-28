@@ -1,0 +1,69 @@
+#
+# Our FunctionBeat configuration to deploy AWS Cloudwatch Lambda JSON logs to Elastic Search
+#
+
+# Configure which S3 endpoint should we use.
+functionbeat.provider.aws.endpoint: "s3.amazonaws.com"
+
+# Configure which S3 bucket we should upload the lambda artifact.
+functionbeat.provider.aws.deploy_bucket: "functionbeat-deploy.authsamples.com"
+
+functionbeat.provider.aws.functions:
+  # Define the list of function availables, each function required to have a unique name.
+  # Create a function that accepts events coming from cloudwatchlogs.
+  - name: lambdalogshipper
+    enabled: true
+    type: cloudwatch_logs
+
+    # Description of the method to help identify them when you run multiples functions.
+    description: "Log Shipper for Cloudwatch API Logs"
+
+    # List the lambdas for which we will collect logs
+    triggers:
+      - log_group_name: /aws/lambda/serverlessapi-deployed-authorizer
+      - log_group_name: /aws/lambda/serverlessapi-deployed-getCompanyList
+      - log_group_name: /aws/lambda/serverlessapi-deployed-getCompanyTransactions
+      - log_group_name: /aws/lambda/serverlessapi-deployed-getUserClaims
+
+    processors:
+      # Deserialize JSON data into individual fields
+      - decode_json_fields:
+          fields: ["message"]
+          process_array: false
+          max_depth: 1
+          target: ""
+          overwrite_keys: true
+  
+#==================== Elasticsearch template setting ==========================
+
+setup.template.settings:
+  index.number_of_shards: 1
+
+# ================================== General ===================================
+
+# Disable index lifecycle management
+setup.ilm.enabled: false
+
+# Set these to reference our API logs index
+setup.template.name: apilogs
+setup.template.pattern: apilogs-*
+
+# ================================== Outputs ===================================
+
+# ---------------------------- Elasticsearch Output ----------------------------
+output.elasticsearch:
+  # Array of hosts to connect to.
+  hosts: ["7839b30852c64538ba5682676d472abc.eu-west-1.aws.found.io:9243"]
+
+  # Protocol - either 'http' (default) or 'https'
+  protocol: "https"
+
+  # Authentication credentials - either id/apikey or username/password
+  api_key: "id:apikey"
+
+  # Reference our Elastic Search index
+  index: apilogs
+
+  # The ingestion pipeline manages finalising Elastic Search data
+  pipelines:
+    - pipeline: apilogs-functionbeat-ingest-pipeline

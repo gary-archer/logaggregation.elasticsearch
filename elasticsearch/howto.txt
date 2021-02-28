@@ -1,0 +1,83 @@
+1. Select all Elastic Search indices
+------------------------------------
+GET /_cat/indices
+
+2. Delete an index completely
+-----------------------------
+DELETE /apilogs
+
+3. View Schema Definition
+-------------------------
+GET apilogs/_mappings
+
+4. Delete a Document by Id
+--------------------------
+DELETE apilogs/_doc/696265d4-16cf-4fab-9a56-a2a06f16cd46
+
+5. Get all documents in an index
+--------------------------------
+GET apilogs/_search
+
+6. Delete all Documents in an Index
+-----------------------------------
+POST apilogs/_delete_by_query?conflicts=proceed
+{
+  "query": {
+    "match_all": {}
+  }
+}
+
+7. Delete all Documents where a field is missing / null
+-------------------------------------------------------
+POST apilogs/_delete_by_query
+{
+  "query": {
+    "bool": {
+      "must_not": {
+        "exists": {
+          "field": "operationName"
+        }
+      }
+    }
+  }
+}
+
+8. Delete all entries for a specific match
+------------------------------------------
+POST apilogs/_delete_by_query
+{
+  "query": {
+    "match": {
+      "sessionId": "cc24c3dd-9bda-7ebe-c941-062a93691e83"
+    }
+  }
+}
+
+9. Delete all entries older than a Time to Live
+-----------------------------------------------
+POST apilogs/_delete_by_query
+{
+  "query": {
+    "range": {
+      "utcTime": {
+        "lte": "now-100d"
+      }
+    }
+  }
+}
+
+10. Rename a Column
+-------------------
+Use update by query, to rename batchId to sessionId:
+
+POST apilogs/_update_by_query
+{
+  "query": {
+    "missing": {
+      "field": "sessionId"
+    }
+  },
+  "script" : {
+    "inline": "ctx._source.sessionId = ctx._source.batchId; ctx._source.remove(\"batchId\");"
+    }
+}

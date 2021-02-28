@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- Keep running while these jobs are alive -->
+    <key>KeepAlive</key>
+    <dict>
+        <key>OtherJobEnabled</key>
+        <dict>
+			<key>kibana</key>
+			<true/>
+            <key>filebeat</key>
+			<true/>
+		</dict>
+    </dict>
+    <key>Label</key>
+    <string>elasticsearch</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/gary/logaggregation/elasticsearch-7.2.0/bin/elasticsearch</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    
+    <!-- Uncomment to log any startup error details
+    <key>StandardErrorPath</key>
+    <string>~/elasticsearch.stderr</string>
+    <key>StandardOutPath</key>
+    <string>~/elasticsearch.stdout</string>
+    -->
+</dict>
+</plist>

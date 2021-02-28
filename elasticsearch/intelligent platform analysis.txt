@@ -1,0 +1,129 @@
+1. DEVELOPER TROUBLESHOOTING LOOKUP
+-----------------------------------
+# Look up an error in a downstream component
+GET apilogs/_search
+{
+  "query" : {
+    "match" : { "errorId" : 97264 }
+  }
+}
+
+2. DEVELOPER VISUALISATION OF API BEHAVIOUR
+-------------------------------------------
+# Use logging as evidence that the API is working as expected
+POST _sql?format=txt
+{
+  "query": "SELECT utcTime, userId, clientApplicationName, millisecondsTaken, statusCode, errorCode from apilogs where apiName='SampleApi' and operationName ='getCompanyTransactions' and resourceId=2 and utcTime>'2019-08-01' order by utcTime desc"
+}
+
+4. DEVELOPER CONCURRENCY QUERIES
+--------------------------------
+# Verify the expected 106 entries after the basic load test
+POST _sql?format=txt
+{
+  "query": "SELECT count(1) from apilogs as loadTestRequests where sessionId='cc24c3dd-9bda-7ebe-c941-062a93691e83'"
+}
+
+# Verify that there are the expected 3 failed entries from the basic load test
+POST _sql?format=txt
+{
+  "query": "SELECT * from apilogs where sessionId='cc24c3dd-9bda-7ebe-c941-062a93691e83' and errorCode is not null"
+}
+
+# Get any slow entries that exceeded their performance threshold during the basic load test
+POST apilogs/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {"term": {"sessionId": "cc24c3dd-9bda-7ebe-c941-062a93691e83"}}
+      ],
+      "filter": {
+        "script": {"script": "doc['millisecondsTaken'].value > doc['millisecondsThreshold'].value"}
+      }
+    }
+  }
+}
+
+5. DEVELOPER VERIFICATION OF TECHNICAL DESIGNS
+----------------------------------------------
+# Verify that 6 authorizer operations are triggered during the load test
+POST _sql?format=txt
+{
+  "query": "SELECT operationName, userId, millisecondsTaken, statusCode, errorCode from apilogs where sessionId='cc24c3dd-9bda-7ebe-c941-062a93691e83' and operationName='authorizer'"
+}
+
+6. QA ACCOUNTING FOR ALL ERROR OCCURRENCES
+---------------------------------------
+# Produce a summary of errors in the current sprint, then ask developers to explain unexpected ones
+POST _sql?format=txt
+{
+  "query": "SELECT apiName, operationName, statusCode, errorCode, count(1) as frequency from apilogs where errorCode is not null and statusCode <> 401 and utcTime > '2019-08-01' group by apiName, operationName, statusCode, errorCode"
+}
+
+8. QA IDENTICATION OF PERFORMANCE PROBLEMS
+-----------------------------------------
+# Find the slowest 5 calls for getCompanyTransactions, which has preformance problems
+POST apilogs/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "term": {"sessionId": "cc24c3dd-9bda-7ebe-c941-062a93691e83"}
+        }
+      ],
+      "filter": [
+        {
+          "range": {"utcTime": {"gte": "2019-08-01"}}
+        },
+        {
+          "script": {"script": "doc['millisecondsTaken'].value > doc['millisecondsThreshold'].value"}
+        },
+        {
+          "term": {"operationName": "getCompanyTransactions"}
+        }
+      ]
+    }
+  },
+  "sort": [
+    {"millisecondsTaken": "desc"}
+  ],
+  "from" : 0, "size" : 5
+}
+
+10. PRODUCTION TECHNICAL DRILL DOWN
+-----------------------------------
+# Look up an error from a screenshot
+GET apilogs/_search
+{
+  "query" : {
+    "match" : { "errorId" : 16007 }
+  }
+}
+
+# Look up context for the log entry
+POST _sql?format=txt
+{
+  "query": "SELECT apiName, operationName, clientApplicationName, statusCode, errorCode, userId from apilogs where errorId=16007"
+}
+
+# See how often the error occurred 30 minutes either side of the incident
+POST _sql?format=txt
+{
+  "query": "SELECT operationName, clientApplicationName, statusCode, errorCode, userId from apilogs where utcTime between '2019-08-16T09:30:00' and '2019-08-16T10:30:00' and errorCode is not null"
+}
+
+# Find what the user was doing at the time
+POST _sql?format=txt
+{
+  "query": "SELECT apiName, operationName, clientApplicationName, userId from apilogs where userId='10345' and utcTime between '2019-08-16T09:30:00' and '2019-08-16T10:30:00' order by utcTime asc limit 100"
+}
+
+12. PRODUCTION API USAGE
+------------------------
+# Query how APIs are used in production
+POST _sql?format=txt
+{
+  "query": "SELECT apiName, operationName, clientApplicationName, count(1) from apilogs where utcTime > '2019-08-01' group by apiName, operationName, clientApplicationName order by apiName, operationName, clientApplicationName"
+}

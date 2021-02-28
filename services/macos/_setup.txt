@@ -1,0 +1,27 @@
+/*
+ * Elastic Stack Setup on Mac OS for Elastic Search, Kibana and Filebeat
+ * For simplicity we'll run the service under our own user account
+ */
+
+Download and unzip under a root folder:
+* /Users/gary/logaggregation/elasticsearch-7.2.0/
+* /Users/gary/logaggregation/filebeat-7.2.0-darwin-x86_64/
+* /Users/gary/logaggregation/kibana-7.2.0-darwin-x86_64/
+
+Set paths in plist files and copy them to this folder:
+* ~/Library/LaunchAgents
+
+Install agents, which will then run on every reboot:
+* launchctl load -w ~/Library/LaunchAgents/elasticsearch.plist
+* launchctl load -w ~/Library/LaunchAgents/kibana.plist
+* launchctl load -w ~/Library/LaunchAgents/filebeat.plist
+
+Unload if required:
+* launchctl unload ~/Library/LaunchAgents/elasticsearch.plist
+* launchctl unload ~/Library/LaunchAgents/kibana.plist
+* launchctl unload ~/Library/LaunchAgents/filebeat.plist
+
+Check if running:
+* launchctl list | grep elasticsearch
+* launchctl list | grep kibana
+* launchctl list | grep filebeat

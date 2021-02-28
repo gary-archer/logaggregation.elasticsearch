@@ -1,0 +1,20 @@
+#
+# Expose the Kibana UI outside the cluster at http://kibana.mycompany.com
+#
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kibana-ingress
+spec:
+  rules:
+    - host: kibana.mycompany.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kibana-kibana
+                port:
+                  number: 5601

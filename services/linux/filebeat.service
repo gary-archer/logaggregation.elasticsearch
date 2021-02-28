@@ -1,0 +1,14 @@
+[Unit]
+Description=Elastic Filebeat
+After=elasticsearch
+
+[Service]
+WorkingDirectory=/home/gary/logaggregation/kibana-7.2.0-linux-x86_64/bin
+ExecStart=/home/gary/logaggregation/filebeat-7.2.0-linux-x86_64/filebeat \
+    -c /home/gary/logaggregation/filebeat-7.2.0-linux-x86_64/filebeat.yml \
+    -path.home /home/gary/logaggregation/filebeat-7.2.0-linux-x86_64
+SyslogIdentifier=filebeat
+User=gary
+
+[Install]
+WantedBy=multi-user.target

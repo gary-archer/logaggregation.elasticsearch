@@ -1,0 +1,28 @@
+#
+# Create the ingestion pipeline when receiving logs from bare Cloudwatch JSON logs
+#
+PUT _ingest/pipeline/apilogs-functionbeat-ingest-pipeline
+{
+    "description": "Api Logs Ingest Pipeline for FunctionBeat",
+    "processors": [
+        {
+            "drop": {
+              "if" : "ctx.apiName == null"
+            },
+            "script": {
+              "source": """
+                  ctx._id = ctx.id;
+              """
+            },
+            "remove": {
+              "field": ["@timestamp", "agent", "cloud", "ecs", "event", "host", "log_group", "log_stream", "message", "message_type", "owner", "subscription_filters"]
+            }
+        }
+    ]
+}
+
+# Query the ingestion pipeline
+GET _ingest/pipeline/apilogs-functionbeat-ingest-pipeline
+
+# Delete the ingestion pipeline
+DELETE _ingest/pipeline/apilogs-functionbeat-ingest-pipeline

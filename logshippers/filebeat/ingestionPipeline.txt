@@ -1,0 +1,28 @@
+#
+# Create the ingestion pipeline when receiving logs from bare JSON log files
+#
+PUT _ingest/pipeline/apilogs-filebeat-ingest-pipeline
+{
+    "description": "Api Logs Ingest Pipeline for FileBeat",
+    "processors": [
+        {
+            "drop": {
+              "if" : "ctx.apiName == null"
+            },
+            "script": {
+              "source": """
+                  ctx._id = ctx.id;
+              """
+            },
+            "remove": {
+              "field": "@timestamp"
+            }
+        }
+    ]
+}
+
+# Query the ingestion pipeline
+GET _ingest/pipeline/apilogs-filebeat-ingest-pipeline
+
+# Delete the ingestion pipeline
+DELETE _ingest/pipeline/apilogs-filebeat-ingest-pipeline

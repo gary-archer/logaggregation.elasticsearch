@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>KeepAlive</key>
+	<true/>
+	<key>Label</key>
+	<string>filebeat</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/Users/gary/logaggregation/filebeat-7.2.0-darwin-x86_64/filebeat</string>
+		<string>-c</string>
+		<string>/Users/gary/logaggregation/filebeat-7.2.0-darwin-x86_64/filebeat.yml</string>
+		<string>-path.home</string>
+		<string>/Users/gary/logaggregation/filebeat-7.2.0-darwin-x86_64</string>
+	</array>
+	<key>RunAtLoad</key>
+	<true/>
+
+    <!-- Uncomment to view any startup error details
+    <key>StandardErrorPath</key>
+    <string>~/filebeat.stderr</string>
+    <key>StandardOutPath</key>
+    <string>~/filebeat.stdout</string>
+    -->
+</dict>
+</plist>
