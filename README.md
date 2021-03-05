@@ -1,4 +1,4 @@
-# authguidance.logaggregation.elasticsearch
+# logaggregation.elasticsearch
 
 ### Overview
 
