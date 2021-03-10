@@ -51,10 +51,6 @@ PUT /apilogs
       {
         "type": "keyword"
       },
-      "userId": 
-      {
-        "type": "keyword"
-      },
       "userOAuthId": 
       {
         "type": "keyword"

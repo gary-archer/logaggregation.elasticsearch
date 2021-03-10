@@ -13,7 +13,7 @@ GET apilogs/_search
 # Use logging as evidence that the API is working as expected
 POST _sql?format=txt
 {
-  "query": "SELECT utcTime, userId, clientApplicationName, millisecondsTaken, statusCode, errorCode from apilogs where apiName='SampleApi' and operationName ='getCompanyTransactions' and resourceId=2 and utcTime>'2019-08-01' order by utcTime desc"
+  "query": "SELECT utcTime, clientApplicationName, millisecondsTaken, statusCode, errorCode from apilogs where apiName='SampleApi' and operationName ='getCompanyTransactions' and resourceId=2 and utcTime>'2019-08-01' order by utcTime desc"
 }
 
 4. DEVELOPER CONCURRENCY QUERIES
@@ -50,7 +50,7 @@ POST apilogs/_search
 # Verify that 6 authorizer operations are triggered during the load test
 POST _sql?format=txt
 {
-  "query": "SELECT operationName, userId, millisecondsTaken, statusCode, errorCode from apilogs where sessionId='cc24c3dd-9bda-7ebe-c941-062a93691e83' and operationName='authorizer'"
+  "query": "SELECT operationName, millisecondsTaken, statusCode, errorCode from apilogs where sessionId='cc24c3dd-9bda-7ebe-c941-062a93691e83' and operationName='authorizer'"
 }
 
 6. QA ACCOUNTING FOR ALL ERROR OCCURRENCES
@@ -105,19 +105,19 @@ GET apilogs/_search
 # Look up context for the log entry
 POST _sql?format=txt
 {
-  "query": "SELECT apiName, operationName, clientApplicationName, statusCode, errorCode, userId from apilogs where errorId=16007"
+  "query": "SELECT apiName, operationName, clientApplicationName, statusCode, errorCode from apilogs where errorId=16007"
 }
 
 # See how often the error occurred 30 minutes either side of the incident
 POST _sql?format=txt
 {
-  "query": "SELECT operationName, clientApplicationName, statusCode, errorCode, userId from apilogs where utcTime between '2019-08-16T09:30:00' and '2019-08-16T10:30:00' and errorCode is not null"
+  "query": "SELECT operationName, clientApplicationName, statusCode, errorCode from apilogs where utcTime between '2019-08-16T09:30:00' and '2019-08-16T10:30:00' and errorCode is not null"
 }
 
 # Find what the user was doing at the time
 POST _sql?format=txt
 {
-  "query": "SELECT apiName, operationName, clientApplicationName, userId from apilogs where userId='10345' and utcTime between '2019-08-16T09:30:00' and '2019-08-16T10:30:00' order by utcTime asc limit 100"
+  "query": "SELECT apiName, operationName, clientApplicationName from apilogs where userOAuthId='a6b404b1-98af-41a2-8e7f-e4061dc0bf86' and utcTime between '2019-08-16T09:30:00' and '2019-08-16T10:30:00' order by utcTime asc limit 100"
 }
 
 12. PRODUCTION API USAGE

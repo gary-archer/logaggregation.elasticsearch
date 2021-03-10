@@ -66,8 +66,8 @@ POST apilogs/_delete_by_query
   }
 }
 
-10. Rename a Column
--------------------
+10. Rename a Field
+------------------
 Use update by query, to rename batchId to sessionId:
 
 POST apilogs/_update_by_query
@@ -79,5 +79,27 @@ POST apilogs/_update_by_query
   },
   "script" : {
     "inline": "ctx._source.sessionId = ctx._source.batchId; ctx._source.remove(\"batchId\");"
+    }
+}
+
+11. Delete a Field
+-------------------
+Use update by query:
+
+POST apilogs/_update_by_query
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "exists": {
+            "field": "userId"
+          }
+        }
+      ]
+    }
+  },
+  "script" : {
+    "inline": "ctx._source.remove(\"userId\");"
     }
 }
