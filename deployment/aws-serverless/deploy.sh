@@ -20,7 +20,7 @@ fi
 # Define other properties
 #
 RESOURCES_FOLDER='../../resources'
-FUNCTIONBEAT_FOLDER='functionbeat-8.10.1-darwin-x86_64'
+FUNCTIONBEAT_FOLDER='functionbeat-8.11.2-darwin-x86_64'
 FUNCTIONBEAT_DOWNLOAD_URL="https://artifacts.elastic.co/downloads/beats/functionbeat/$FUNCTIONBEAT_FOLDER.tar.gz"
 
 #
@@ -52,7 +52,7 @@ cd "$FUNCTIONBEAT_FOLDER"
 # Update the configuration by replacing the functionbeat.yml file
 #
 echo 'Updating functionbeat configuration ...'
-FUNCTIONBEAT_TEMPLATE_FILE='../../deployment/aws-serverless/functionbeat.8.10.1.template.yml'
+FUNCTIONBEAT_TEMPLATE_FILE='../../deployment/aws-serverless/functionbeat.8.11.2.template.yml'
 export ELASTICSEARCH_API_KEY
 envsubst < "$FUNCTIONBEAT_TEMPLATE_FILE" > functionbeat.yml
 if [ $? -ne 0 ]; then
