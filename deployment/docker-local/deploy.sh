@@ -56,19 +56,6 @@ export SCHEMA_FILE_PATH
 export INGESTION_PIPELINE_FILE_PATH
 
 #
-# If required, create log folders from which filebeat will ship logs
-#
-if [ ! -d '../../../oauth.logs' ]; then
-  mkdir '../../../oauth.logs'
-fi
-if [ ! -d '../../../oauth.logs/api' ]; then
-  mkdir '../../../oauth.logs/api'
-fi
-if [ ! -d '../../../oauth.logs/oauthagent' ]; then
-  mkdir '../../../oauth.logs/oauthagent'
-fi
-
-#
 # Run the docker deployment to deploy Elasticsearch, Kibana and Filebeat
 #
 echo 'Deploying the Elastic Stack ...'
