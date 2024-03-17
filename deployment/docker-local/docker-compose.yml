@@ -55,7 +55,6 @@ services:
       - ./filebeat.yml:/usr/share/filebeat/filebeat.yml
       - ./certs/authsamples-dev.ca.pem:/usr/share/filebeat/certs/authsamples-dev.ca.crt
       - ../../../oauth.apisample.nodejs/logs:/var/log/api
-      - ../../../oauth.websample.final/localtokenhandler/logs:/var/log/oauthagent
     environment:
       ELASTICSEARCH_USERNAME: '${ELASTIC_USER}'
       ELASTICSEARCH_PASSWORD: '${ELASTIC_PASSWORD}'

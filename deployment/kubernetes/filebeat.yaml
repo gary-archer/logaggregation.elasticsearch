@@ -19,7 +19,6 @@ data:
     - type: container
       paths:
         - /var/log/containers/finalapi*.log
-        - /var/log/containers/oauthagent*.log
       json:
         keys_under_root: true
         add_error_key: false
