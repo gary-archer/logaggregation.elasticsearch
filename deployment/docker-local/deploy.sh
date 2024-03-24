@@ -83,7 +83,7 @@ sleep 10
 # - elastic
 # - Password1
 #
-KIBANA_URL='http://logs.authsamples-dev.com:5601/app/dev_tools#/console'
+KIBANA_URL='https://logs.authsamples-dev.com:5601/app/dev_tools#/console'
 if [ "$PLATFORM" == 'MACOS' ]; then
 
   open "$KIBANA_URL"

@@ -24,8 +24,9 @@ services:
       ELASTIC_PASSWORD: '${ELASTIC_PASSWORD}'
 
   #
-  # Deploy Kibana with a dummy user account different to 'elastic', to prevent startup failures
-  # At the time of writing Kibana does not load the EC based certificate file created here, so we use plain HTTP
+  # Deploy Kibana with a dummy user account different to 'elastic', to prevent startup failures.
+  # At the time of writing Kibana expects PKCS12 files to contain an RSA key whereas I use an EC key.
+  # Therefore I deploy the key and certificate files rather than the password protected P12 file.
   # - https://github.com/gary-archer/oauth.developmentcertificates/blob/master/makecerts.sh
   #
   kibana:
@@ -35,15 +36,16 @@ services:
       - 5601:5601
     volumes:
       - ./certs/authsamples-dev.ca.pem:/usr/share/kibana/config/certs/authsamples-dev.ca.crt
-      #- ./certs/authsamples-dev.ssl.p12:/usr/share/kibana/config/certs/authsamples-dev.ssl.p12
+      - ./certs/authsamples-dev.ssl.key:/usr/share/kibana/config/certs/authsamples-dev.ssl.key
+      - ./certs/authsamples-dev.ssl.pem:/usr/share/kibana/config/certs/authsamples-dev.ssl.pem
     environment:
       ELASTICSEARCH_HOSTS: 'https://elasticsearch-internal.authsamples-dev.com:9200'
       ELASTICSEARCH_USERNAME: '${KIBANA_SYSTEM_USER}'
       ELASTICSEARCH_PASSWORD: '${KIBANA_PASSWORD}'
-      SERVER_PUBLICBASEURL: 'http://logs.authsamples-dev.com:5601'
-      SERVER_SSL_ENABLED: 'false'
-      #SERVER_SSL_KEYSTORE_PATH: '/usr/share/kibana/config/certs/authsamples-dev.ssl.p12'
-      #SERVER_SSL_KEYSTORE_PASSWORD: 'Password1'
+      SERVER_PUBLICBASEURL: 'https://logs.authsamples-dev.com:5601'
+      SERVER_SSL_ENABLED: 'true'
+      SERVER_SSL_KEY: '/usr/share/kibana/config/certs/authsamples-dev.ssl.key'
+      SERVER_SSL_CERTIFICATE: '/usr/share/kibana/config/certs/authsamples-dev.ssl.pem'
       ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES: '/usr/share/kibana/config/certs/authsamples-dev.ca.crt'
 
   #
