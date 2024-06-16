@@ -37,7 +37,7 @@ spec:
             - name: ELASTICSEARCH_PASSWORD
               value: 'Password1'
             - name: SERVER_PUBLICBASEURL
-              value: 'https://logs.mycluster.com'
+              value: 'https://logs.authsamples-k8s-dev.com'
             - name: SERVER_SSL_ENABLED
               value: 'false'
           ports:
