@@ -58,7 +58,7 @@ fi
 # Push the docker image
 #
 if [ "$DOCKER_REPOSITORY" == "" ]; then
-  kind load docker-image "$DOCKER_IMAGE" --name $CLUSTER_NAME
+  kind load docker-image "$DOCKER_IMAGE" --name oauth
 else
   docker image push "$DOCKER_IMAGE"
 fi

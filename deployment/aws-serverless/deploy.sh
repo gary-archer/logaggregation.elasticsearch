@@ -52,7 +52,7 @@ cd "$FUNCTIONBEAT_FOLDER"
 # Update the configuration by replacing the functionbeat.yml file
 #
 echo 'Updating functionbeat configuration ...'
-FUNCTIONBEAT_TEMPLATE_FILE='../../deployment/aws-serverless/functionbeat.8.14.0.template.yml'
+FUNCTIONBEAT_TEMPLATE_FILE='../../deployment/aws-serverless/functionbeat.8.14.3.template.yml'
 export ELASTICSEARCH_API_KEY
 envsubst < "$FUNCTIONBEAT_TEMPLATE_FILE" > functionbeat.yml
 if [ $? -ne 0 ]; then
