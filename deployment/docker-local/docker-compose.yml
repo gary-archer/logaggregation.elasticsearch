@@ -9,7 +9,7 @@ services:
     ports:
       - 9200:9200
     volumes:
-      - ./certs/authsamples-dev.ca.pem:/usr/share/elasticsearch/config/certs/authsamples-dev.ca.crt
+      - ./certs/authsamples-dev.ca.crt:/usr/share/elasticsearch/config/certs/authsamples-dev.ca.crt
       - ./certs/authsamples-dev.ssl.p12:/usr/share/elasticsearch/config/certs/authsamples-dev.ssl.p12
     environment:
       discovery.type: 'single-node'
@@ -34,7 +34,7 @@ services:
     ports:
       - 5601:5601
     volumes:
-      - ./certs/authsamples-dev.ca.pem:/usr/share/kibana/config/certs/authsamples-dev.ca.crt
+      - ./certs/authsamples-dev.ca.crt:/usr/share/kibana/config/certs/authsamples-dev.ca.crt
       - ./certs/authsamples-dev.ssl.key:/usr/share/kibana/config/certs/authsamples-dev.ssl.key
       - ./certs/authsamples-dev.ssl.pem:/usr/share/kibana/config/certs/authsamples-dev.ssl.pem
     environment:
@@ -56,7 +56,7 @@ services:
     hostname: filebeat-internal.authsamples-dev.com
     volumes:
       - ./filebeat.yml:/usr/share/filebeat/filebeat.yml
-      - ./certs/authsamples-dev.ca.pem:/usr/share/filebeat/certs/authsamples-dev.ca.crt
+      - ./certs/authsamples-dev.ca.crt:/usr/share/filebeat/certs/authsamples-dev.ca.crt
       - ../../../oauth.apisample.nodejs/logs:/var/log/api
     environment:
       ELASTICSEARCH_USERNAME: '${ELASTIC_USER}'

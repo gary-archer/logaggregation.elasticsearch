@@ -24,7 +24,7 @@ Download SSL development certificates:
 Next configure [Browser SSL Trust](https://authguidance.com/2017/11/11/developer-ssl-setup#browser) for the SSL root certificate:
 
 ```text
-./deployment/docker-local/certs/authsamples-dev.ca.pem
+./deployment/docker-local/certs/authsamples-dev.ca.crt
 ```
 
 ### Deploy the System
