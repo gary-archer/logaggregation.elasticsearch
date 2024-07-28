@@ -38,7 +38,7 @@ Run the following command to deploy Docker components for Elasticsearch, Kibana 
 The script will wait for completion and open Kibana in the system browser.\
 Login with a username of `elastic` and a password of `Password1`, then query API logs:
 
-![kibana application](images/kibana.png)
+![kibana application](doc/kibana.png)
 
 ## Further Information
 
