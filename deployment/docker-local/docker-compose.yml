@@ -36,7 +36,7 @@ services:
     volumes:
       - ./certs/authsamples-dev.ca.crt:/usr/share/kibana/config/certs/authsamples-dev.ca.crt
       - ./certs/authsamples-dev.ssl.key:/usr/share/kibana/config/certs/authsamples-dev.ssl.key
-      - ./certs/authsamples-dev.ssl.pem:/usr/share/kibana/config/certs/authsamples-dev.ssl.pem
+      - ./certs/authsamples-dev.ssl.crt:/usr/share/kibana/config/certs/authsamples-dev.ssl.crt
     environment:
       ELASTICSEARCH_HOSTS: 'https://elasticsearch-internal.authsamples-dev.com:9200'
       ELASTICSEARCH_USERNAME: '${KIBANA_SYSTEM_USER}'
@@ -44,7 +44,7 @@ services:
       SERVER_PUBLICBASEURL: 'https://logs.authsamples-dev.com:5601'
       SERVER_SSL_ENABLED: 'true'
       SERVER_SSL_KEY: '/usr/share/kibana/config/certs/authsamples-dev.ssl.key'
-      SERVER_SSL_CERTIFICATE: '/usr/share/kibana/config/certs/authsamples-dev.ssl.pem'
+      SERVER_SSL_CERTIFICATE: '/usr/share/kibana/config/certs/authsamples-dev.ssl.crt'
       ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES: '/usr/share/kibana/config/certs/authsamples-dev.ca.crt'
 
   #
